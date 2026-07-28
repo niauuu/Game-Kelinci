@@ -1,7 +1,13 @@
-const rabbit = document.getElementById("rabbit");
-const stone = document.getElementById("stone");
-const carrot = document.getElementById("carrot");
+// ===============================
+// KELINCI LOMPAT - SCRIPT BAGIAN 1
+// ===============================
 
+// Objek
+const rabbit = document.getElementById("rabbit");
+const carrot = document.getElementById("carrot");
+const stone = document.getElementById("stone");
+
+// HUD
 const scoreTxt = document.getElementById("score");
 const levelTxt = document.getElementById("level");
 const lifeTxt = document.getElementById("life");
@@ -11,203 +17,130 @@ const menu = document.getElementById("menu");
 const gameOver = document.getElementById("gameOver");
 const finalScore = document.getElementById("finalScore");
 
+// Audio
 const jumpSound = document.getElementById("jumpSound");
 const coinSound = document.getElementById("coinSound");
 const hitSound = document.getElementById("hitSound");
 const bgMusic = document.getElementById("bgMusic");
 
+// Tombol
 document.getElementById("startBtn").onclick = startGame;
+
+// ===============================
+// DATA GAME
+// ===============================
 
 let score = 0;
 let level = 1;
 let life = 3;
 
+let speed = 6;
+
+let gameRunning = false;
+
+// Physics
+
 let rabbitY = 120;
-let jumping = false;
+let velocity = 0;
+const gravity = 0.8;
+let onGround = true;
+
+// Posisi
 
 let stoneX = window.innerWidth;
-let carrotX = window.innerWidth + 400;
+let carrotX = window.innerWidth + 500;
 
-let speed = 6;
+// Highscore
 
 let highscore = localStorage.getItem("highscore") || 0;
 highTxt.innerHTML = highscore;
 
-function startGame() {
+// ===============================
+// START GAME
+// ===============================
+
+function startGame(){
+
     menu.style.display = "none";
 
+    gameRunning = true;
+
     bgMusic.volume = 0.4;
+
     bgMusic.play().catch(()=>{});
 
     requestAnimationFrame(update);
+
 }
 
-function jump() {
+// ===============================
+// LOMPAT
+// ===============================
 
-    if(jumping) return;
+function jump(){
 
-    jumping = true;
+    if(!gameRunning) return;
+
+    if(!onGround) return;
+
+    velocity = 15;
+
+    onGround = false;
 
     jumpSound.currentTime = 0;
+
     jumpSound.play();
-
-    let up = setInterval(()=>{
-
-        rabbitY += 10;
-
-        rabbit.style.bottom = rabbitY + "px";
-
-        if(rabbitY >= 260){
-
-            clearInterval(up);
-
-            let down = setInterval(()=>{
-
-                rabbitY -= 10;
-
-                rabbit.style.bottom = rabbitY + "px";
-
-                if(rabbitY <= 120){
-
-                    rabbitY = 120;
-                    rabbit.style.bottom = "120px";
-
-                    clearInterval(down);
-
-                    jumping = false;
-
-                }
-
-            },20);
-
-        }
-
-    },20);
 
 }
 
-document.addEventListener("keydown",e=>{
+// Keyboard
 
-    if(e.code=="Space")
+document.addEventListener("keydown",function(e){
+
+    if(e.code==="Space"){
+
         jump();
+
+    }
 
 });
 
-document.addEventListener("click",jump);
+// HP
 
-function update(){
+document.addEventListener("touchstart",function(){
 
-    stoneX -= speed;
+    jump();
 
-    if(stoneX < -80){
+});
 
-        stoneX = window.innerWidth + Math.random()*300;
+// Mouse
 
-    }
+document.addEventListener("mousedown",function(){
 
-    stone.style.left = stoneX + "px";
+    jump();
 
+});
 
-    carrotX -= speed;
+// ===============================
+// UPDATE PLAYER
+// ===============================
 
-    if(carrotX < -80){
+function updatePlayer(){
 
-        carrotX = window.innerWidth + 400 + Math.random()*300;
+    velocity -= gravity;
 
-    }
+    rabbitY += velocity;
 
-    carrot.style.left = carrotX + "px";
+    if(rabbitY <= 120){
 
+        rabbitY = 120;
 
-    // Ambil wortel
+        velocity = 0;
 
-    if(
-
-        carrotX < 170 &&
-        carrotX > 80 &&
-        rabbitY > 170
-
-    ){
-
-        carrotX = window.innerWidth + 500;
-
-        score++;
-
-        coinSound.currentTime = 0;
-        coinSound.play();
-
-        scoreTxt.innerHTML = score;
-
-        if(score > highscore){
-
-            highscore = score;
-
-            localStorage.setItem("highscore",highscore);
-
-            highTxt.innerHTML = highscore;
-
-        }
-
-        let newLevel = Math.floor(score/10)+1;
-
-        if(newLevel != level){
-
-            level = newLevel;
-
-            levelTxt.innerHTML = level;
-
-            speed += 1;
-
-        }
+        onGround = true;
 
     }
 
-
-    // Tabrak batu
-
-    if(
-
-        stoneX < 170 &&
-        stoneX > 80 &&
-        rabbitY < 180
-
-    ){
-
-        stoneX = window.innerWidth + 300;
-
-        life--;
-
-        hitSound.currentTime = 0;
-        hitSound.play();
-
-        lifeTxt.innerHTML = life;
-
-        if(life <= 0){
-
-            endGame();
-
-            return;
-
-        }
-
-    }
-
-    requestAnimationFrame(update);
-
-}
-
-function endGame(){
-
-    bgMusic.pause();
-
-    finalScore.innerHTML = score;
-
-    gameOver.style.display = "flex";
-
-}
-
-function restartGame(){
-
-    location.reload();
+    rabbit.style.bottom = rabbitY + "px";
 
 }
