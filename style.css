@@ -1,0 +1,227 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    overflow:hidden;
+    background:linear-gradient(#6ec6ff,#d9f7ff);
+}
+
+/* Logo */
+
+.logo{
+    position:fixed;
+    top:10px;
+    right:10px;
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    background:#fff;
+    padding:5px;
+    box-shadow:0 0 20px rgba(0,0,0,.4);
+    z-index:1000;
+}
+
+/* Menu */
+
+#menu{
+    position:absolute;
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    background:rgba(0,0,0,.45);
+    color:#fff;
+    z-index:999;
+}
+
+#menu h1{
+    font-size:50px;
+    margin-bottom:20px;
+    text-shadow:3px 3px 5px #000;
+}
+
+#menu p{
+    margin-top:15px;
+    font-size:18px;
+}
+
+button{
+    padding:15px 35px;
+    font-size:20px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    background:#4CAF50;
+    color:#fff;
+    transition:.3s;
+}
+
+button:hover{
+    transform:scale(1.05);
+    background:#2e7d32;
+}
+
+/* HUD */
+
+#hud{
+    position:absolute;
+    top:10px;
+    left:10px;
+    display:flex;
+    gap:10px;
+    z-index:500;
+}
+
+.box{
+    background:#ffffffdd;
+    padding:10px 15px;
+    border-radius:10px;
+    font-weight:bold;
+    box-shadow:0 4px 10px rgba(0,0,0,.2);
+}
+
+/* Game */
+
+#game{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+}
+
+/* Langit */
+
+#game::before{
+    content:"";
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:
+    radial-gradient(circle,#fff 10%,transparent 11%) 10% 15%/120px 60px,
+    radial-gradient(circle,#fff 10%,transparent 11%) 50% 20%/130px 60px,
+    radial-gradient(circle,#fff 10%,transparent 11%) 80% 10%/120px 60px;
+    opacity:.8;
+}
+
+/* Rumput */
+
+#ground{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:120px;
+    background:linear-gradient(#5ecb43,#2b8b2d);
+}
+
+/* Rabbit */
+
+#rabbit{
+    position:absolute;
+    left:120px;
+    bottom:120px;
+    font-size:70px;
+    transition:.15s;
+}
+
+/* Stone */
+
+#stone{
+    position:absolute;
+    right:-100px;
+    bottom:120px;
+    font-size:60px;
+}
+
+/* Carrot */
+
+#carrot{
+    position:absolute;
+    right:-300px;
+    bottom:220px;
+    font-size:50px;
+    animation:spin 2s linear infinite;
+}
+
+/* Putar Wortel */
+
+@keyframes spin{
+
+0%{
+transform:rotate(0deg);
+}
+
+100%{
+transform:rotate(360deg);
+}
+
+}
+
+/* Game Over */
+
+#gameOver{
+    position:absolute;
+    width:100%;
+    height:100%;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    background:rgba(0,0,0,.8);
+    color:white;
+    z-index:999;
+}
+
+#gameOver h1{
+    font-size:70px;
+    margin-bottom:20px;
+}
+
+#gameOver h2{
+    margin-bottom:20px;
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+.logo{
+width:65px;
+height:65px;
+}
+
+#rabbit{
+font-size:55px;
+}
+
+#stone{
+font-size:45px;
+}
+
+#carrot{
+font-size:40px;
+}
+
+#menu h1{
+font-size:34px;
+}
+
+button{
+font-size:18px;
+padding:12px 25px;
+}
+
+#hud{
+flex-wrap:wrap;
+}
+
+.box{
+font-size:14px;
+}
+
+}
