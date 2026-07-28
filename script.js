@@ -144,3 +144,148 @@ function updatePlayer(){
     rabbit.style.bottom = rabbitY + "px";
 
 }
+
+// ===============================
+// UPDATE GAME
+// ===============================
+
+function update() {
+
+    if (!gameRunning) return;
+
+    // Update Player
+    updatePlayer();
+
+    // =====================
+    // BATU
+    // =====================
+
+    stoneX -= speed;
+
+    if (stoneX < -60) {
+
+        stoneX = window.innerWidth + Math.random() * 300;
+
+    }
+
+    stone.style.left = stoneX + "px";
+
+    // =====================
+    // WORTEL
+    // =====================
+
+    carrotX -= speed;
+
+    if (carrotX < -60) {
+
+        carrotX = window.innerWidth + 500 + Math.random() * 400;
+
+    }
+
+    carrot.style.left = carrotX + "px";
+
+    // =====================
+    // AMBIL WORTEL
+    // =====================
+
+    if (
+        carrotX < 170 &&
+        carrotX > 90 &&
+        rabbitY > 180
+    ) {
+
+        carrotX = window.innerWidth + 500;
+
+        score++;
+
+        scoreTxt.innerHTML = score;
+
+        coinSound.currentTime = 0;
+        coinSound.play();
+
+        // HIGH SCORE
+
+        if (score > highscore) {
+
+            highscore = score;
+
+            localStorage.setItem("highscore", highscore);
+
+            highTxt.innerHTML = highscore;
+
+        }
+
+        // LEVEL
+
+        let newLevel = Math.floor(score / 10) + 1;
+
+        if (newLevel != level) {
+
+            level = newLevel;
+
+            levelTxt.innerHTML = level;
+
+            speed += 1;
+
+        }
+
+    }
+
+    // =====================
+    // TABRAK BATU
+    // =====================
+
+    if (
+        stoneX < 170 &&
+        stoneX > 80 &&
+        rabbitY < 170
+    ) {
+
+        stoneX = window.innerWidth + 300;
+
+        life--;
+
+        lifeTxt.innerHTML = life;
+
+        hitSound.currentTime = 0;
+        hitSound.play();
+
+        if (life <= 0) {
+
+            endGame();
+
+            return;
+
+        }
+
+    }
+
+    requestAnimationFrame(update);
+
+}
+
+// ===============================
+// GAME OVER
+// ===============================
+
+function endGame() {
+
+    gameRunning = false;
+
+    bgMusic.pause();
+
+    finalScore.innerHTML = score;
+
+    gameOver.style.display = "flex";
+
+}
+
+// ===============================
+// RESTART
+// ===============================
+
+function restartGame() {
+
+    location.reload();
+
+}
